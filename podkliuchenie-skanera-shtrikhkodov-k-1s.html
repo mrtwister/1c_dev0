@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Разработчик 1С</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="1C программирование, 1С разработка, СКД">
+    <meta name="author" content="Роман Беляев">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    
+    <!-- FontAwesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css">   
+    
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/theme/css/styles.css">
+    
+</head> 
+
+<body>
+    <!-- ******HEADER****** --> 
+    <header class="header">
+        <div class="container clearfix">                       
+            <img class="profile-image img-fluid float-left" src="https://i.imgur.com/lrWn1la.png" alt="Роман Беляев" />
+            <div class="profile-content float-left">
+                <h1 class="name">Роман Беляев</h1>
+                <h2 class="desc">Разработчик 1С</h2>   
+            </div><!--//profile-->
+            <a class="btn btn-cta-primary float-right" href="">На главную</a>              
+        </div><!--//container-->
+    </header><!--//header-->
+
+    
+    <div class="container sections-wrapper">
+        <div class="row">
+            <div class="primary">
+<section class="latest section">
+    <div class="section-inner">                        
+        <div class="content">    
+                            
+            <div class="item featured text-left">
+                    <h3 class="title"><a href="/podkliuchenie-skanera-shtrikhkodov-k-1s.html">"Подключение сканера штрихкодов к 1С"</a></h3>
+                    <p>Опубликовано Вт 18 Сентябрь 2012 в <a href="/category/raznoe.html">"Разное"</a></p>
+<p>Теги: <a href="/tag/skaner-shtrikhkodov.html">Сканер штрихкодов</a>, <a href="/tag/podkliuchenie-skanera.html">Подключение сканера</a>, <a href="/tag/ut103.html">УТ10.3</a>, </p>                    <div class="desc text-left">                                    
+                            <p><h2>Подключение сканера метролоджик ms 5145 к 1С Управление торговлей.</h2>
+<p>Для того что бы разобраться с подключением сканера, нужно понимать, как все работает и какие бывают режимы, что касается ms5145 то это USB сканер который начинает работать сразу после подключения к компьютеру. Если после подключения открыть блокнот и отсканировать штрихкод, то мы в блокноте увидим код который обозначает этот штрихкод, как будто мы набрали его на клавиатуре. То есть он работает сразу из коробки. Итак нам надо что бы сканер работал в 1С. При использовании сканера работает следующая схема: при сканировании штрихкод перехватывет драйвер и передает в 1С. Это специальный драйвер который сделан для того что бы перехватывать события сканирования, не путайте с драйвером самого сканера. В целом схему взаимодействия сканера и 1С можно изобразить так:
+<img alt="Imgur" src="http://i.imgur.com/e5TVKlL.png"></p>
+<p>При настройке сканера в 1С нужно указать com  порт (настройки мы рассмотрим внимательно чуть позже) а у нас сканер работает как клавиатура. Вариантов у нас несколько.
+1. Использование режима ввода с клавитуры. Перед сканированием в окне подбора, в документе ЧЕКККМ, Реализация товаров и услуг, нажать F7 и отсканировать штрихкод. Штрихкод отсканируется и сам нажмет ОК. Как будто это вы сами набрали штрихкод с клавиатуры.</p>
+<ol>
+<li>
+<p>Использование старого драйвера Атол. Драйвер Атол платный и стоит нормальных денег, бесплатно он сканирует с 10ти секундной задержкой. Можно поискать в инете бесплатную версию DTO6_2009_02_11, при установке этого драйвера в списке ком портов появляется пункт клавиатура  указываем его и все ок, поиск по штрихкоду происходит при сканировании штрихкода без лишних движений.</p>
+</li>
+<li>
+<p>Перевод сканера в режим эмуляции com порта для перевода. Если перевести сканер в режим эмуляции com порта то он будет делать вид, что подключен через com порт, который ура! можно подсунуть  стандартному драйверу от 1С. Для того, что бы перевести сканер в такой режим, надо отсканировать штрихкод из книжечки которая шла вместе со сканером, если книжечки нет ее можно скачать <a href="http://www.honeywellaidc.com/en-us/pages/Product.aspx?category=Laser&amp;cat=HSM&amp;pid=5145">на офицальном сайте</a> и распечатать нужную страницу из руководства. После того как вы отсканируете код, сканер переключится на режим эмуляции ком порта, система найдет новое устройство и запросит драйвера, их можно взять с офф сайта по вышеприведенной ссылке или скачать <a href="https://googledrive.com/host/0BxFnXEinPWUJckpLWkVCVjc0dUU/drv_metrolologik.zip">мою подборку</a>, откуда она собралась я уже не помню. Но она меня выручала не раз. Указываете путь к драйверу и у вас в системе новый ком порт, все можно его использовать. После этого вам нужно установить драйвер, который будет передавать штрихкод в программу 1С, здесь подойдет любой  драйвер штрихкода от фирмы 1С. Они все умеют перехватывать события от com порта. В случае если у вас сервер терминалов, то у каждого клиента, должен быть свой уникальный com порт, то есть у двух пользователей подключенных к одному серверу терминалов, сканеры должны висеть на разных com портах иначе сканер будет работать только у кого то одного.</p>
+</li>
+<li>
+<p>С 29.02.12 стадартный драйвер 1С версии 8.0.12.2 (на текущий момент акутальная версия 8.0.14.1 любая версия легко гуглится по версии драйвера например вот так <a href="http://goo.gl/poGiF">Scan_OPOS_8_0_14_1.rar</a> умеет работать с клавиатурными сканерами без танцев-бубнов, переключений в режим эмуляции и тд. После установки драйвера в списке com портов наблюдаем пункт клавиатура, который собственно и отрабатывает событие считывание штрихкода, сканером в режиме клавиатуры. Похоже это самое удобный способ.</p>
+</li>
+</ol>
+<p>Перейдем к настройке сканера, настройка сканера происходит в меню Сервис -&gt; Торговое оборудование -&gt; Подключение и настройка торгового оборудования перейдем на закладку сканеры штрихкода там добавляем строку, открывается справочник торговое оборудование, здесь надо добавить наш сканер, указываем любое название и обработку обслуживания, если вы устанавливали конфигурацию, то ее можно взять в каталоге с шаблонами TradeWareEpf, где то здесь: <code>C:\Users\admin\AppData\Roaming\1C\1Cv82\tmplts\1c\Retail\Номер_Релиза_Конфигурации</code> если не устанавливали, то ищите на диске ИТС, если нет диска ИТС, придется его скачать или загуглить. Потом, указываем порт скорость и другие настройки com порта из диспетчера задач. Собственно все. Буду рад ответить на ваши вопросы в коментариях.</p></p>
+                     </div><!--//desc-->         
+
+            <div class="entry-content">  </div><!-- /.entry-content -->
+            
+            </div> <!--item-->
+        </div> <!--content-->    
+    </div> <!--div cectiov-->
+</section>
+            
+            </div><!--//primary-->
+     
+        </div><!--//row-->
+    </div><!--//masonry-->
+       
+
+    <!-- ******FOOTER****** --> 
+    <footer class="footer">
+        <div class="container text-center">
+                <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out our commercial license options via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Дизайн сайта любезно предоставлен <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a></small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+ 
+    <!-- Javascript -->          
+    <!-- <script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/popper.min.js"></script> 
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-rss/dist/jquery.rss.min.js"></script>  -->
+</body>
+</html> 

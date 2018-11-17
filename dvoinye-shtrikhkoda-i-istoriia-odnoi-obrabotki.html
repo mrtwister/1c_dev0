@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Разработчик 1С</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="1C программирование, 1С разработка, СКД">
+    <meta name="author" content="Роман Беляев">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'> 
+    
+    <!-- FontAwesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css">   
+    
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/theme/css/styles.css">
+    
+</head> 
+
+<body>
+    <!-- ******HEADER****** --> 
+    <header class="header">
+        <div class="container clearfix">                       
+            <img class="profile-image img-fluid float-left" src="https://i.imgur.com/lrWn1la.png" alt="Роман Беляев" />
+            <div class="profile-content float-left">
+                <h1 class="name">Роман Беляев</h1>
+                <h2 class="desc">Разработчик 1С</h2>   
+            </div><!--//profile-->
+            <a class="btn btn-cta-primary float-right" href="">На главную</a>              
+        </div><!--//container-->
+    </header><!--//header-->
+
+    
+    <div class="container sections-wrapper">
+        <div class="row">
+            <div class="primary">
+<section class="latest section">
+    <div class="section-inner">                        
+        <div class="content">    
+                            
+            <div class="item featured text-left">
+                    <h3 class="title"><a href="/dvoinye-shtrikhkoda-i-istoriia-odnoi-obrabotki.html">"Двойные штрихкода и история одной обработки"</a></h3>
+                    <p>Опубликовано Вс 08 Сентябрь 2013 в <a href="/category/programmirovanie.html">"Программирование"</a></p>
+<p>Теги: <a href="/tag/praktika-programmirovaniia-1s.html">Практика программирования 1С</a>, <a href="/tag/obrabotka.html">Обработка</a>, <a href="/tag/zapros.html">Запрос</a>, </p>                    <div class="desc text-left">                                    
+                            <p><h3>Преамбула</h3>
+<p>В какой то момент в базе встала проблема двойных штрихкодов. Причем ситация до того как на нее обратили внимание, приобрела катосторофический характер и имела полторы тысячи дублей штрихкодов (когда один штрихкод принадлежит нескольким товарам) и порядка 25ти тысяч дублей товаров (когда у одного товарам есть несколько штрихкодов). Что тому виной? На текущий момент уже сложно сказать. Возможно РИБ, когда одному и тому же товару присваивают штрихкод в разных базах. Возможно свою лепту внесли слияния нескольких баз с одинаковым товаром, но разными штрихкодами. Скорее всего все вместе + какой то еще фактор, который мы пока не можем найти. Слишком много вышло дублей, почти четверть базы. Так или иначе встала задача с этими штрихкодами что то сделать.</p>
+<h3>Постановка задачи.</h3>
+<p>Необходимо найти задублирововашиеся штрихкода и показить пользователю в удобном виде. Дать возможность что то сделать сразу с этими штрихкодами без необходимости лазить по справочникам и регистрам. Если говорить конкретно, то у пользователя должна быть возможность:</p>
+<ol>
+<li>Удалить все штрихкода у владельца, кроме выделенного.</li>
+<li>Удалить конкретный лишний штрихкод.</li>
+<li>Одним махом удалить все лишние дубли, оставив по одному на владельца.</li>
+<li>Удалить все штрихкода которые засветились как задублированные.</li>
+</ol>
+<h3>Приступим к реализации первой части.</h3>
+<p>Поиск лишних штрихкодов. Сам поиск достататочно банален: нужно воспользоваться функций КОЛИЧЕСТВО(РАЗЛИЧНЫЕ СюдаУказатьПолеДляГруппировки). В самом простом случае, запрос будет выглядеть вот так:</p>
+<pre style="text-align: left; font-family: courier new,courier; color: black">
+<font color=blue>ВЫБРАТЬ
+    </font>Штрихкоды.Штрихкод<font color=blue>,
+    </font><font color=brown>КОЛИЧЕСТВО</font><font color=blue>(РАЗЛИЧНЫЕ </font>Штрихкоды.Владелец<font color=blue>) КАК </font>Владелец
+<font color=blue>ИЗ
+    </font>РегистрСведений.Штрихкоды <font color=blue>КАК </font>Штрихкоды
+<font color=blue>СГРУППИРОВАТЬ ПО
+    </font>Штрихкоды.Штрихкод</pre>
+
+<p>Для того, что бы отфильтровать результаты запроса необходимо его обернуть во вложеный запрос и тогда уже можно накладывать условия на результат его работы. В целом нормально, но как то неудобно, для удобства наверно не помешает сгруппировать результаты по штрихкодам. В результате мы можем получить вот такой запрос. Вот результат его работы в консоли.
+<img alt="Результат работы запроса" src="https://api.monosnap.com/image/download?id=5e8qdGdh0ss6sMzCTYOarse6J" title="Результат работы запроса в консоли">
+Этот вариант удобен для первого варианта поиска, сделать запрос для второго варианта по аналогии не должно составить труда. Запросы готовы, но не будет же пользователь смотреть на результат его работы из консоли. Здесь нам и поможет дерево значений. Смысл работы с деревом следующий: дерево содержит колекцию колонок и строк. Коллекция колонок не отличается от коллекции колонок в таблице значений и нас не интересует. Коллекция строк немного инетереснее, каждая строка ее может содержать такую же коллекцию строк, каждая строка которой... вообщем я думаю мысль понятна, таким образом и организуется иерархия. Используем обход результатов запроса по группировкам, для того что сформировать удобное дерево:
+<pre style="color: blue;"><code class="_1c8">Выборка <span style="color: red;">=</span> Запрос<span style="color: red;">.</span><span style="color: red;">Выполнить</span><span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">.</span>Выбрать<span style="color: red;">(</span>ОбходРезультатаЗапроса<span style="color: red;">.</span>ПоГруппировкам<span style="color: red;">)</span><span style="color: red;">;</span>
+ЭтаФорма<span style="color: red;">.</span>Заголовок <span style="color: red;">=</span> <span style="color: black;">"Найдено "</span> <span style="color: red;">+</span> Выборка<span style="color: red;">.</span>Количество<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+<span style="color: red;">Пока</span> Выборка<span style="color: red;">.</span>Следующий<span style="color: red;">(</span><span style="color: red;">)</span> <span style="color: red;">Цикл</span><br>
+    НоваяСтрокаТП <span style="color: red;">=</span> ТабличноеПоле<span style="color: red;">.</span>Строки<span style="color: red;">.</span>Добавить<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span><br>
+    НоваяСтрокаТП<span style="color: red;">.</span>Номенклатура <span style="color: red;">=</span> Выборка<span style="color: red;">.</span>Штрихкод<span style="color: red;">;</span><br>
+    ВыборкаШтрихКода <span style="color: red;">=</span> Выборка<span style="color: red;">.</span>Выбрать<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span><br>
+    <span style="color: red;">Пока</span> ВыборкаШтрихКода<span style="color: red;">.</span>Следующий<span style="color: red;">(</span><span style="color: red;">)</span> <span style="color: red;">Цикл</span>   <br>
+        НоваяСтрокаВладелец <span style="color: red;">=</span> НоваяСтрокаТП<span style="color: red;">.</span>Строки<span style="color: red;">.</span>Добавить<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>      <br>
+        НоваяСтрокаВладелец<span style="color: red;">.</span>Номенклатура <span style="color: red;">=</span> ВыборкаШтрихКода<span style="color: red;">.</span>Владелец<span style="color: red;">;</span>     <br>
+    <span style="color: red;">КонецЦикла</span><span style="color: red;">;</span> <br>
+<span style="color: red;">КонецЦикла</span><span style="color: red;">;</span></code></pre></p>
+<p>Как следствие мы можем получить вот такую форму:
+<img alt="Форма обработки" src="https://api.monosnap.com/image/download?id=wDPn9V8vDlujcauOfMSIonqUr" title="Сгруппированные штрихкода на форме"></p>
+<h3>Работа с регистром штрихкодов</h3>
+<p>Когда есть все нужные данные можно начинать работать с регистром штрихкодов. Так как у нас ищутся не только штрихкода с несколькими владельцами, но и владельцы с несколькими штрихкодами, то состав табличного поля может быть разным, это необходимо учитывать. Приступим к реализации п1 - Удалить все штрихкода кроме выделенного. Для этого подготовим данные для записи в регистр. Выделим значение отобора и штрихкод который нам надо оставить:</p>
+<pre style="color: blue;"><code class="_1c8">СтруктураВРегистр <span style="color: red;">=</span> <span style="color: red;">Новый</span> Структура<span style="color: red;">(</span><span style="color: black;">"КлючОтбора, ЗначениеОтбора, ШтрихКод, Владелец"</span><span style="color: red;">)</span><span style="color: red;">;</span>
+<span style="color: red;">Если</span> ТипЗнч<span style="color: red;">(</span>СтрокаДерева<span style="color: red;">.</span>Номенклатура<span style="color: red;">)</span> <span style="color: red;">=</span> Тип<span style="color: red;">(</span><span style="color: black;">"СправочникСсылка.Номенклатура"</span><span style="color: red;">)</span> 
+    <span style="color: red;">ИЛИ</span> ТипЗнч<span style="color: red;">(</span>СтрокаДерева<span style="color: red;">.</span>Номенклатура<span style="color: red;">)</span> <span style="color: red;">=</span> Тип<span style="color: red;">(</span><span style="color: black;">"СправочникСсылка.ИнформационныеКарты"</span><span style="color: red;">)</span> <span style="color: red;">Тогда</span>    
+    СтруктураВРегистр<span style="color: red;">.</span>КлючОтбора <span style="color: red;">=</span> <span style="color: black;">"Штрихкод"</span><span style="color: red;">;</span>    
+    СтруктураВРегистр<span style="color: red;">.</span>ЗначениеОтбора <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+    СтруктураВРегистр<span style="color: red;">.</span>Штрихкод <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span>   
+    СтруктураВРегистр<span style="color: red;">.</span>Владелец <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+<span style="color: red;">Иначе</span>  
+    СтруктураВРегистр<span style="color: red;">.</span>КлючОтбора <span style="color: red;">=</span> <span style="color: black;">"Владелец"</span><span style="color: red;">;</span>    
+    СтруктураВРегистр<span style="color: red;">.</span>ЗначениеОтбора <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+    СтруктураВРегистр<span style="color: red;">.</span>Штрихкод <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+    СтруктураВРегистр<span style="color: red;">.</span>Владелец <span style="color: red;">=</span> СтрокаДерева<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span>   
+<span style="color: red;">КонецЕсли</span><span style="color: red;">;</span></code></pre>
+
+<p>Теперь надо удалить все "лишние" штрихкода кроме конкретного, того на который указал пользователь. Я решил этот вопрос просто: я очищаю набор по указанному отбору и добавляю нужный штрихкод. По моему это самый простой и быстрый способ. Вот код:</p>
+<pre style="color: blue;"><code class="_1c8">НаборЗаписей <span style="color: red;">=</span> РегистрыСведений<span style="color: red;">.</span>Штрихкоды<span style="color: red;">.</span>СоздатьНаборЗаписей<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+НаборЗаписей<span style="color: red;">.</span>Отбор<span style="color: red;">[</span>СтруктураСДанными<span style="color: red;">.</span>КлючОтбора<span style="color: red;">]</span><span style="color: red;">.</span>Установить<span style="color: red;">(</span>СтруктураСДанными<span style="color: red;">.</span>ЗначениеОтбора<span style="color: red;">)</span><span style="color: red;">;</span>
+НаборЗаписей<span style="color: red;">.</span>Записать<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+НоваяЗаписьНабора <span style="color: red;">=</span> НаборЗаписей<span style="color: red;">.</span>Добавить<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+НоваяЗаписьНабора<span style="color: red;">.</span>Владелец <span style="color: red;">=</span> СтруктураСДанными<span style="color: red;">.</span>Владелец<span style="color: red;">;</span>
+НоваяЗаписьНабора<span style="color: red;">.</span>ЕдиницаИзмерения <span style="color: red;">=</span> СтруктураСДанными<span style="color: red;">.</span>Владелец<span style="color: red;">.</span>ЕдиницаХраненияОстатков<span style="color: red;">;</span>
+НоваяЗаписьНабора<span style="color: red;">.</span>ТипШтрихкода <span style="color: red;">=</span> ПланыВидовХарактеристик<span style="color: red;">.</span>ТипыШтрихкодов<span style="color: red;">.</span>EAN13<span style="color: red;">;</span>
+НоваяЗаписьНабора<span style="color: red;">.</span>Штрихкод <span style="color: red;">=</span> СтруктураСДанными<span style="color: red;">.</span>ШтрихКод<span style="color: red;">;</span>
+НоваяЗаписьНабора<span style="color: red;">.</span>Качество <span style="color: red;">=</span> Справочники<span style="color: red;">.</span>Качество<span style="color: red;">.</span><span style="color: red;">Новый</span><span style="color: red;">;</span>
+НаборЗаписей<span style="color: red;">.</span>Записать<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span></code></pre>
+
+<p>Перебирая строки дерева значений можно реализовать и п.3. Мы же идем дальше и приступаем к п.2. Для этих целей я использовал менеджер записи, в целом тут все просто до безобразия:
+<pre style="color: blue;"><code class="_1c8"><span style="color: red;">Если</span> ТипЗнч<span style="color: red;">(</span>ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущиеДанные<span style="color: red;">.</span>Номенклатура<span style="color: red;">)</span> <span style="color: red;">=</span> Тип<span style="color: red;">(</span><span style="color: black;">"СправочникСсылка.Номенклатура"</span><span style="color: red;">)</span> 
+    <span style="color: red;">ИЛИ</span> ТипЗнч<span style="color: red;">(</span>ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущиеДанные<span style="color: red;">.</span>Номенклатура<span style="color: red;">)</span> <span style="color: red;">=</span> Тип<span style="color: red;">(</span><span style="color: black;">"СправочникСсылка.ИнформационныеКарты"</span><span style="color: red;">)</span> <span style="color: red;">Тогда</span> 
+    Штрихкод <span style="color: red;">=</span> ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущаяСтрока<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> <br>
+    Владелец <span style="color: red;">=</span> ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущиеДанные<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+<span style="color: red;">Иначе</span><br>
+    Штрихкод <span style="color: red;">=</span> ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущиеДанные<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> 
+    Владелец <span style="color: red;">=</span> ЭлементыФормы<span style="color: red;">.</span>ТабличноеПоле<span style="color: red;">.</span>ТекущаяСтрока<span style="color: red;">.</span>Родитель<span style="color: red;">.</span>Номенклатура<span style="color: red;">;</span> <br>
+<span style="color: red;">КонецЕсли</span><span style="color: red;">;</span></br>
+МенеджерЗаписи <span style="color: red;">=</span> РегистрыСведений<span style="color: red;">.</span>Штрихкоды<span style="color: red;">.</span>СоздатьМенеджерЗаписи<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>Штрихкод <span style="color: red;">=</span> Штрихкод<span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>Владелец <span style="color: red;">=</span> Владелец<span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>ТипШтрихкода <span style="color: red;">=</span> ПланыВидовХарактеристик<span style="color: red;">.</span>ТипыШтрихкодов<span style="color: red;">.</span>EAN13<span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>ЕдиницаИзмерения <span style="color: red;">=</span> Владелец<span style="color: red;">.</span>ЕдиницаХраненияОстатков<span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>Качество <span style="color: red;">=</span> Справочники<span style="color: red;">.</span>Качество<span style="color: red;">.</span><span style="color: red;">Новый</span><span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>Прочитать<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span>
+МенеджерЗаписи<span style="color: red;">.</span>Удалить<span style="color: red;">(</span><span style="color: red;">)</span><span style="color: red;">;</span></code></pre>
+Остался последний самый простой пункт. Я думаю тут даже код не нужен. Все и так просто. Делаем отбор в наборе и записываем не читая. Вот такая получилась обработка. Почти весь нужный код для работы обработки в этой статье есть. За бортом осталась косметика, украшательства и тд, то, что каждый настраивает по своему вкусу, но если все таки у вас не вышло собрать обработку, то обработку можно <a href="http://infostart.ru/public/200131/">скачать на инфостарте</a>.</p></p>
+                     </div><!--//desc-->         
+
+            <div class="entry-content">  </div><!-- /.entry-content -->
+            
+            </div> <!--item-->
+        </div> <!--content-->    
+    </div> <!--div cectiov-->
+</section>
+            
+            </div><!--//primary-->
+     
+        </div><!--//row-->
+    </div><!--//masonry-->
+       
+
+    <!-- ******FOOTER****** --> 
+    <footer class="footer">
+        <div class="container text-center">
+                <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out our commercial license options via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Дизайн сайта любезно предоставлен <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a></small>
+        </div><!--//container-->
+    </footer><!--//footer-->
+ 
+    <!-- Javascript -->          
+    <!-- <script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/popper.min.js"></script> 
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-rss/dist/jquery.rss.min.js"></script>  -->
+</body>
+</html> 
